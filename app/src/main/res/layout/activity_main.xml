@@ -28,4 +28,13 @@
         android:layout_alignParentStart="true"
         android:layout_marginBottom="126dp" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="next page"
+        android:id="@+id/button_1"
+        android:layout_below="@+id/imageView"
+        android:layout_alignEnd="@+id/imageView"
+        android:layout_marginEnd="54dp" />
+
 </RelativeLayout>
