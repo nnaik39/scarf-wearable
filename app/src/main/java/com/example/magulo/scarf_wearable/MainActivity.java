@@ -10,28 +10,30 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 public class MainActivity extends ActionBarActivity {
-    private ImageView imageView;
-    private Button button;
-    private Button button_1;
+    private ImageView nyan_cat;
+    //to rename vars go to refactor -> rename
+    private Button showCat;
+    private Button setup_2;
+    private Button setup_3;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        button = (Button) findViewById(R.id.button);
-        imageView = (ImageView) findViewById(R.id.imageView);
-        button_1 = (Button) findViewById(R.id.button_1);
-        button_1.setOnClickListener(new View.OnClickListener() {
+        showCat = (Button) findViewById(R.id.showCat);
+        nyan_cat = (ImageView) findViewById(R.id.imageView);
+        setup_2 = (Button) findViewById(R.id.button_1);
+        setup_2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, TempSetter.class);
                 startActivity(intent);
             }
         });
-        button.setOnClickListener(new View.OnClickListener() {
+        showCat.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (imageView.isShown() == true)
-                    imageView.setVisibility(View.INVISIBLE);
+                if (nyan_cat.isShown() == true)
+                    nyan_cat.setVisibility(View.INVISIBLE);
                 else
-                    imageView.setVisibility(View.VISIBLE);
+                    nyan_cat.setVisibility(View.VISIBLE);
             }
         });
     }
