@@ -1,35 +1,24 @@
 package com.example.magulo.scarf_wearable;
 
-import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 
 
-public class TempSetter extends ActionBarActivity {
-    private Button next;
+public class Contacts extends ActionBarActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-                setContentView(R.layout.activity_temp_setter);
-                next = (Button) findViewById(R.id.next);
-                next.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        Intent intent_1 = new Intent(TempSetter.this, Contacts.class);
-                        startActivity(intent_1);
-            }
-        });
-
+        setContentView(R.layout.activity_contacts);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_temp_setter, menu);
+        getMenuInflater().inflate(R.menu.menu_contacts, menu);
         return true;
     }
 

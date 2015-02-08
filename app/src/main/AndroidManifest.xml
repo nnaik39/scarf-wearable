@@ -20,6 +20,10 @@
             android:name=".TempSetter"
             android:label="@string/title_activity_temp_setter" >
         </activity>
+        <activity
+            android:name=".Contacts"
+            android:label="@string/title_activity_contacts" >
+        </activity>
     </application>
 
 </manifest>

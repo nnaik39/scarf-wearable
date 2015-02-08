@@ -14,7 +14,7 @@ public class MainActivity extends ActionBarActivity {
     //to rename vars go to refactor -> rename
     private Button showCat;
     private Button setup_2;
-    private Button setup_3;
+//    private Button setup_3;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,8 +24,8 @@ public class MainActivity extends ActionBarActivity {
         setup_2 = (Button) findViewById(R.id.button_1);
         setup_2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, TempSetter.class);
-                startActivity(intent);
+                    Intent intent = new Intent(MainActivity.this, TempSetter.class);
+                    startActivity(intent);
             }
         });
         showCat.setOnClickListener(new View.OnClickListener() {

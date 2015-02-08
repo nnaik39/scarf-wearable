@@ -3,38 +3,63 @@
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity"
+    android:background="#ff83ffd9">
 
     <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView" />
 
-    <ImageView
+ <ImageView
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView"
         android:src="@drawable/nyan_cat"
-        android:layout_alignBottom="@+id/button"
-        android:layout_alignParentStart="true" />
+     android:layout_alignParentStart="true"
+     android:visibility="invisible"
+     android:layout_above="@+id/showCat" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="New Button"
-        android:id="@+id/button"
+        android:id="@+id/showCat"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="126dp" />
+        android:layout_marginBottom="126dp"
+        android:visibility="invisible" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="next page"
+        android:text="check temperature"
         android:id="@+id/button_1"
         android:layout_below="@+id/imageView"
-        android:layout_alignEnd="@+id/imageView"
-        android:layout_marginEnd="54dp" />
+        android:layout_alignEnd="@+id/editText2"
+        android:layout_alignBottom="@+id/showCat" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText"
+        android:layout_below="@+id/textView"
+        android:layout_toStartOf="@+id/button_1"
+        android:text="insert app title here" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText2"
+        android:layout_below="@+id/editText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="67dp"
+        android:text="insert logo here" />
+
+    <android.gesture.GestureOverlayView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/gestureOverlayView"></android.gesture.GestureOverlayView>
 
 </RelativeLayout>
