@@ -7,14 +7,27 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.graphics.Color;
+import android.app.Activity;
+import android.widget.ImageView;
 
+import java.util.Random;
 
 public class TempSetter extends ActionBarActivity {
     private Button next;
+    private ImageView tempView;
+    int tempInput;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-                setContentView(R.layout.activity_temp_setter);
+        setContentView(R.layout.activity_temp_setter);
+        Random rand = new Random();
+        tempInput = rand.nextInt(200) + 1;
+        tempView = (ImageView) findViewById(R.id.tempView);
+//        tempInput = (Integer) 200;
+        if (100 < tempInput) {
+            tempView.animate().scaleYBy(1.5f).setDuration(5000); }
+//        setContentView(R.layout.activity_temp_setter);
                 next = (Button) findViewById(R.id.next);
                 next.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {

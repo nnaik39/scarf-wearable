@@ -16,18 +16,9 @@
         android:layout_height="wrap_content"
         android:text="Is the temperature number right?"
         android:id="@+id/checkBox"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView2"
-        android:layout_below="@+id/checkBox"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="67dp"
-        android:src="@drawable/nyan_cat"
-        android:visibility="invisible" />
+        android:layout_alignBaseline="@+id/next"
+        android:layout_alignBottom="@+id/next"
+        android:layout_alignStart="@+id/imageView" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -43,14 +34,35 @@
         android:layout_height="wrap_content"
         android:text="Next"
         android:id="@+id/next"
-        android:layout_alignTop="@+id/imageView2"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignEnd="@+id/imageView" />
 
-    <SurfaceView
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/surfaceView"
+        android:id="@+id/tempView"
+        android:src="@drawable/redrect"
         android:layout_below="@+id/editText3"
+        android:layout_toEndOf="@+id/textView2"
+        android:layout_marginTop="64dp" />
+
+ <!--   <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:src="@drawable/emptytherm"
+        android:layout_alignTop="@+id/tempView"
         android:layout_centerHorizontal="true" />
+-->
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView2"
+        android:minHeight="100dp"
+        android:minWidth="200dp"
+        android:background="#ffffb7e7"
+        android:layout_above="@+id/next"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="75dp" />
 
 </RelativeLayout>

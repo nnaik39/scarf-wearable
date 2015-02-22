@@ -14,13 +14,17 @@ public class MainActivity extends ActionBarActivity {
     //to rename vars go to refactor -> rename
     private Button showCat;
     private Button setup_2;
+    private ImageView imageView;
+    private Button button_1;
 //    private Button setup_3;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//        imageView = (ImageView) findViewById(R.id.imageView);
+        button_1 = (Button) findViewById(R.id.button_1);
         showCat = (Button) findViewById(R.id.showCat);
-        nyan_cat = (ImageView) findViewById(R.id.imageView);
+//        nyan_cat = (ImageView) findViewById(R.id.imageView);
         setup_2 = (Button) findViewById(R.id.button_1);
         setup_2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

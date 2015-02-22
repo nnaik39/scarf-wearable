@@ -23,6 +23,7 @@
         <activity
             android:name=".Contacts"
             android:label="@string/title_activity_contacts" >
+            <uses-permission android:name="android.permission.READ_CONTACTS" />
         </activity>
     </application>
 

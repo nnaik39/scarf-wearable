@@ -1,10 +1,16 @@
 package com.example.magulo.scarf_wearable;
 
+import android.Manifest;
+import android.app.LoaderManager;
+import android.database.Cursor;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-
+import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.widget.AdapterView;
+import android.provider.ContactsContract;
 
 public class Contacts extends ActionBarActivity {
 

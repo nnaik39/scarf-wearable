@@ -4,21 +4,17 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity"
-    android:background="#ff83ffd9">
+    android:background="@drawable/scarf">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
+    <Button
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:id="@+id/textView" />
-
- <ImageView
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView"
-        android:src="@drawable/nyan_cat"
-     android:layout_alignParentStart="true"
-     android:visibility="invisible"
-     android:layout_above="@+id/showCat" />
+        android:text="check temperature"
+        android:id="@+id/button_1"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="#ff5ea4ab"
+        android:textColor="#ffffffff" />
 
     <Button
         android:layout_width="wrap_content"
@@ -31,35 +27,23 @@
         android:layout_marginBottom="126dp"
         android:visibility="invisible" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="check temperature"
-        android:id="@+id/button_1"
-        android:layout_below="@+id/imageView"
-        android:layout_alignEnd="@+id/editText2"
-        android:layout_alignBottom="@+id/showCat" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editText"
-        android:layout_below="@+id/textView"
-        android:layout_toStartOf="@+id/button_1"
-        android:text="insert app title here" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editText2"
-        android:layout_below="@+id/editText"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="67dp"
-        android:text="insert logo here" />
-
     <android.gesture.GestureOverlayView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/gestureOverlayView"></android.gesture.GestureOverlayView>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="SmartScarf"
+        android:id="@+id/textView"
+        android:layout_marginTop="51dp"
+        android:textIsSelectable="false"
+        android:textSize="50dp"
+        android:layout_below="@+id/gestureOverlayView"
+        android:layout_centerHorizontal="true"
+        android:textColor="#fff3fee1" />
+
 </RelativeLayout>
+
