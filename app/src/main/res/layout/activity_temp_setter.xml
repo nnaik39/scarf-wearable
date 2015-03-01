@@ -9,7 +9,7 @@
 
     <TextView android:text="Check your temperature" android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView2" />
+        android:id="@+id/messages" />
 
     <CheckBox
         android:layout_width="wrap_content"
@@ -23,11 +23,11 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText3"
+        android:id="@+id/input"
         android:selectAllOnFocus="false"
         android:text="Your temperature is"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/textView2" />
+        android:layout_below="@+id/messages" />
 
     <Button
         android:layout_width="wrap_content"
@@ -42,9 +42,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/tempView"
         android:src="@drawable/redrect"
-        android:layout_below="@+id/editText3"
-        android:layout_toEndOf="@+id/textView2"
-        android:layout_marginTop="64dp" />
+        android:layout_alignBottom="@+id/imageView2"
+        android:layout_toEndOf="@+id/messages"
+        android:layout_marginBottom="46dp" />
 
  <!--   <ImageView
         android:layout_width="wrap_content"
