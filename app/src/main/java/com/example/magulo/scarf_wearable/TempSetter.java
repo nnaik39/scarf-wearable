@@ -31,7 +31,8 @@ public class TempSetter extends Activity {
     private Button next;
     private ImageView tempView;
     int tempInput;
-
+    String temp_feedback;
+    private TextView temp_view;
     // UUIDs for UAT service and associated characteristics.
     public static UUID UART_UUID = UUID.fromString("6E400001-B5A3-F393-E0A9-E50E24DCCA9E");
     public static UUID TX_UUID = UUID.fromString("6E400002-B5A3-F393-E0A9-E50E24DCCA9E");
@@ -107,7 +108,14 @@ public class TempSetter extends Activity {
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
             super.onCharacteristicChanged(gatt, characteristic);
-            writeLine("Received: " + characteristic.getStringValue(0));
+            int output = characteristic.getStringValue(0).charAt(0);
+            float x = (float) output;
+            float voltage = x * 5/1023;
+            float temp = voltage * 100;
+            writeLine("Received: " + temp);
+            String temp_string = String.format("%.2f", temp);
+            temp_view.setText(temp_string + "C");
+//            temp_view.setText("C");
         }
     };
 
@@ -135,28 +143,33 @@ public class TempSetter extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_temp_setter);
         messages = (TextView) findViewById(R.id.messages);
-        input = (EditText) findViewById(R.id.input);
         adapter = BluetoothAdapter.getDefaultAdapter();
         Random rand = new Random();
         tempInput = rand.nextInt(200) + 1;
         tempView = (ImageView) findViewById(R.id.tempView);
+        temp_view = (TextView) findViewById(R.id.temp_view);
 //        tempInput = (Integer) 200;
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                //Do something after 100ms
+                //thing to do every 2000 milliseconds (aka every 2 seconds)
                 sendClick();
+                handler.postDelayed(this, 2000);
             }
-        }, 10000);
+            // never reaches this point, so this number doesn't matter
+        }, 3000);
         if (100 < tempInput) {
             tempView.animate().scaleYBy(1.5f).setDuration(5000); }
+        temp_view = (TextView) findViewById(R.id.temp_view);
+        temp_feedback = Integer.toString(tempInput);
+        temp_view.setText(temp_feedback);
 //        setContentView(R.layout.activity_temp_setter);
-                next = (Button) findViewById(R.id.next);
-                next.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        Intent intent_1 = new Intent(TempSetter.this, Contacts.class);
-                        startActivity(intent_1);
+        next = (Button) findViewById(R.id.next);
+        next.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent_1 = new Intent(TempSetter.this, Contacts.class);
+                startActivity(intent_1);
             }
         });
 
@@ -242,19 +255,16 @@ public class TempSetter extends Activity {
     }
     public void sendClick() {
         String message = "Wassup!";
- //       String message = input.getText().toString();
+        //       String message = input.getText().toString();
         if (tx == null || message == null || message.isEmpty()) {
             // Do nothing if there is no device or message to send.
             return;
         }
         // Update TX characteristic value.  Note the setValue overload that takes a byte array must be used.
         tx.setValue(message.getBytes(Charset.forName("UTF-8")));
-        if (gatt.writeCharacteristic(tx)) {
-            writeLine("Sent: " + message);
-        }
-        else {
-            writeLine("Couldn't write TX characteristic!");
-        }
+        gatt.writeCharacteristic(tx);
+        writeLine("Sent: " + message);
+
     }
 
 

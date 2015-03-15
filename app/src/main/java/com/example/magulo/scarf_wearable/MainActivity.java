@@ -22,8 +22,8 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 //        imageView = (ImageView) findViewById(R.id.imageView);
-        button_1 = (Button) findViewById(R.id.button_1);
-        showCat = (Button) findViewById(R.id.showCat);
+//       showCat = (Button) findViewById(R.id.button_1);
+//       showCat = (Button) findViewById(R.id.showCat);
 //        nyan_cat = (ImageView) findViewById(R.id.imageView);
         setup_2 = (Button) findViewById(R.id.button_1);
         setup_2.setOnClickListener(new View.OnClickListener() {
@@ -32,14 +32,14 @@ public class MainActivity extends ActionBarActivity {
                     startActivity(intent);
             }
         });
-        showCat.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (nyan_cat.isShown() == true)
-                    nyan_cat.setVisibility(View.INVISIBLE);
-                else
-                    nyan_cat.setVisibility(View.VISIBLE);
-            }
-        });
+//        showCat.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                if (nyan_cat.isShown() == true)
+//                    nyan_cat.setVisibility(View.INVISIBLE);
+//                else
+//                    nyan_cat.setVisibility(View.VISIBLE);
+//            }
+//        });
     }
 
 
