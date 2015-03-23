@@ -22,15 +22,21 @@ import android.widget.Button;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.Charset;
+import java.security.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
 public class TempSetter extends Activity {
     private Button next;
+    long curTime;
     private ImageView tempView;
     int tempInput;
+    HashMap<Long, Float> time_temp = new HashMap<Long, Float>();
+    Handler handler;
     String temp_feedback;
     private TextView temp_view;
     // UUIDs for UAT service and associated characteristics.
@@ -57,17 +63,17 @@ public class TempSetter extends Activity {
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             super.onConnectionStateChange(gatt, status, newState);
             if (newState == BluetoothGatt.STATE_CONNECTED) {
-                writeLine("Connected!");
+  //              writeLine("Connected!");
                 // Discover services.
                 if (!gatt.discoverServices()) {
-                    writeLine("Failed to start discovering services!");
+    //                writeLine("Failed to start discovering services!");
                 }
             }
             else if (newState == BluetoothGatt.STATE_DISCONNECTED) {
-                writeLine("Disconnected!");
+    //            writeLine("Disconnected!");
             }
             else {
-                writeLine("Connection state changed.  New state: " + newState);
+   //             writeLine("Connection state changed.  New state: " + newState);
             }
         }
 
@@ -78,10 +84,10 @@ public class TempSetter extends Activity {
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             super.onServicesDiscovered(gatt, status);
             if (status == BluetoothGatt.GATT_SUCCESS) {
-                writeLine("Service discovery completed!");
+ //               writeLine("Service discovery completed!");
             }
             else {
-                writeLine("Service discovery failed with status: " + status);
+//                writeLine("Service discovery failed with status: " + status);
             }
             // Save reference to each characteristic.
             tx = gatt.getService(UART_UUID).getCharacteristic(TX_UUID);
@@ -96,11 +102,11 @@ public class TempSetter extends Activity {
                 BluetoothGattDescriptor desc = rx.getDescriptor(CLIENT_UUID);
                 desc.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
                 if (!gatt.writeDescriptor(desc)) {
-                    writeLine("Couldn't write RX client descriptor value!");
+//                    writeLine("Couldn't write RX client descriptor value!");
                 }
             }
             else {
-                writeLine("Couldn't get RX client descriptor!");
+//                writeLine("Couldn't get RX client descriptor!");
             }
         }
 
@@ -109,12 +115,19 @@ public class TempSetter extends Activity {
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
             super.onCharacteristicChanged(gatt, characteristic);
             int output = characteristic.getStringValue(0).charAt(0);
+
+            temp_view = (TextView) findViewById(R.id.temp_view);
             float x = (float) output;
             float voltage = x * 5/1023;
             float temp = voltage * 100;
-            writeLine("Received: " + temp);
+            //TODO: decrease memory ftprint by converting to int, unconvert to int, etc.
+            curTime = System.currentTimeMillis();
+            time_temp.put(curTime, temp);
+            //TODO: writeLine(curTime + temp);
+            //TODO: create file/email stuff
+//            writeLine("Received: " + temp);
             String temp_string = String.format("%.2f", temp);
-            temp_view.setText(temp_string + "C");
+            writeLine(temp_string + "C");
 //            temp_view.setText("C");
         }
     };
@@ -124,12 +137,12 @@ public class TempSetter extends Activity {
         // Called when a device is found.
         @Override
         public void onLeScan(BluetoothDevice bluetoothDevice, int i, byte[] bytes) {
-            writeLine("Found device: " + bluetoothDevice.getAddress());
+  //          writeLine("Found device: " + bluetoothDevice.getAddress());
             // Check if the device has the UART service.
             if (parseUUIDs(bytes).contains(UART_UUID)) {
                 // Found a device, stop the scan.
                 adapter.stopLeScan(scanCallback);
-                writeLine("Found UART service!");
+//                writeLine("Found UART service!");
                 // Connect to the device.
                 // Control flow will now go to the callback functions when BTLE events occur.
                 gatt = bluetoothDevice.connectGatt(getApplicationContext(), false, callback);
@@ -149,7 +162,7 @@ public class TempSetter extends Activity {
         tempView = (ImageView) findViewById(R.id.tempView);
         temp_view = (TextView) findViewById(R.id.temp_view);
 //        tempInput = (Integer) 200;
-        final Handler handler = new Handler();
+        handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -161,9 +174,9 @@ public class TempSetter extends Activity {
         }, 3000);
         if (100 < tempInput) {
             tempView.animate().scaleYBy(1.5f).setDuration(5000); }
-        temp_view = (TextView) findViewById(R.id.temp_view);
+      //  temp_view = (TextView) findViewById(R.id.temp_view);
         temp_feedback = Integer.toString(tempInput);
-        temp_view.setText(temp_feedback);
+      //  temp_view.setText(temp_feedback);
 //        setContentView(R.layout.activity_temp_setter);
         next = (Button) findViewById(R.id.next);
         next.setOnClickListener(new View.OnClickListener() {
@@ -179,8 +192,7 @@ public class TempSetter extends Activity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                messages.append(text);
-                messages.append("\n");
+                temp_view.setText(text);
             }
         });
     }
@@ -238,7 +250,7 @@ public class TempSetter extends Activity {
         super.onResume();
         // Scan for all BTLE devices.
         // The first one with the UART service will be chosen--see the code in the scanCallback.
-        writeLine("Scanning for devices...");
+//        writeLine("Scanning for devices...");
         adapter.startLeScan(scanCallback);
     }
     @Override
@@ -263,7 +275,7 @@ public class TempSetter extends Activity {
         // Update TX characteristic value.  Note the setValue overload that takes a byte array must be used.
         tx.setValue(message.getBytes(Charset.forName("UTF-8")));
         gatt.writeCharacteristic(tx);
-        writeLine("Sent: " + message);
+    //    writeLine("Sent: " + message);
 
     }
 
