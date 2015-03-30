@@ -35,11 +35,13 @@ public class Contacts extends ActionBarActivity {
         save_pref = (Button) findViewById(R.id.button2);
         shared_pref = getApplicationContext().getSharedPreferences(
                 "phone_storage", Context.MODE_PRIVATE);
+        phone_input.setText(shared_pref.getString("phone_number", "not entered"));
         save_pref.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 phoneNumber = phone_input.getText().toString();
                 editor = shared_pref.edit();
                 editor.putString("phone_number", phoneNumber);
+
                 editor.commit();
                 if (phoneNumber.equals("5551233456")) {
                     Toast.makeText(getApplicationContext(), "Please enter a phone number", Toast.LENGTH_LONG).show();
