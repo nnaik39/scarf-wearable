@@ -84,12 +84,4 @@
         android:layout_alignParentStart="true"
         android:visibility="invisible" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/time_stamp"
-        android:layout_alignTop="@+id/messages"
-        android:layout_centerHorizontal="true" />
-
 </RelativeLayout>

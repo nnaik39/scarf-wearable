@@ -43,7 +43,7 @@ public class Contacts extends ActionBarActivity {
                 editor.putString("phone_number", phoneNumber);
 
                 editor.commit();
-                if (phoneNumber.equals("5551233456")) {
+                if (phoneNumber.equals("1235550199")) {
                     Toast.makeText(getApplicationContext(), "Please enter a phone number", Toast.LENGTH_LONG).show();
                 }
             }

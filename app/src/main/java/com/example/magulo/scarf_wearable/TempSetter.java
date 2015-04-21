@@ -8,9 +8,14 @@ import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +24,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Button;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.client.ClientProtocolException;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.Charset;
@@ -34,6 +49,7 @@ public class TempSetter extends Activity {
     private Button next;
     long curTime;
     private ImageView tempView;
+    private SharedPreferences shared_pref;
     int tempInput;
     HashMap<Long, Float> time_temp = new HashMap<Long, Float>();
     Handler handler;
@@ -63,17 +79,15 @@ public class TempSetter extends Activity {
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             super.onConnectionStateChange(gatt, status, newState);
             if (newState == BluetoothGatt.STATE_CONNECTED) {
-  //              writeLine("Connected!");
+                //              writeLine("Connected!");
                 // Discover services.
                 if (!gatt.discoverServices()) {
-    //                writeLine("Failed to start discovering services!");
+                    //                writeLine("Failed to start discovering services!");
                 }
-            }
-            else if (newState == BluetoothGatt.STATE_DISCONNECTED) {
-    //            writeLine("Disconnected!");
-            }
-            else {
-   //             writeLine("Connection state changed.  New state: " + newState);
+            } else if (newState == BluetoothGatt.STATE_DISCONNECTED) {
+                //            writeLine("Disconnected!");
+            } else {
+                //             writeLine("Connection state changed.  New state: " + newState);
             }
         }
 
@@ -84,9 +98,8 @@ public class TempSetter extends Activity {
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             super.onServicesDiscovered(gatt, status);
             if (status == BluetoothGatt.GATT_SUCCESS) {
- //               writeLine("Service discovery completed!");
-            }
-            else {
+                //               writeLine("Service discovery completed!");
+            } else {
 //                writeLine("Service discovery failed with status: " + status);
             }
             // Save reference to each characteristic.
@@ -95,7 +108,7 @@ public class TempSetter extends Activity {
             // Setup notifications on RX characteristic changes (i.e. data received).
             // First call setCharacteristicNotification to enable notification.
             if (!gatt.setCharacteristicNotification(rx, true)) {
-                writeLine("Couldn't set notifications for RX characteristic!");
+                Log.v("record", "Couldn't set notifications for RX characteristic!");
             }
             // Next update the RX characteristic's client descriptor to enable notifications.
             if (rx.getDescriptor(CLIENT_UUID) != null) {
@@ -104,11 +117,18 @@ public class TempSetter extends Activity {
                 if (!gatt.writeDescriptor(desc)) {
 //                    writeLine("Couldn't write RX client descriptor value!");
                 }
-            }
-            else {
+            } else {
 //                writeLine("Couldn't get RX client descriptor!");
             }
         }
+
+
+
+//            @Override
+//            protected void onPostExecute(String result) {
+//                super.onPostExecute(result);
+                //Do anything with response..
+//            }
 
         // Called when a remote characteristic changes (like the RX characteristic).
         @Override
@@ -120,14 +140,21 @@ public class TempSetter extends Activity {
             float x = (float) output;
             float voltage = x * 5/1023;
             float temp = voltage * 100;
-            //TODO: decrease memory ftprint by converting to int, unconvert to int, etc.
             curTime = System.currentTimeMillis();
             time_temp.put(curTime, temp);
-            //TODO: writeLine(curTime + temp);
-            //TODO: create file/email stuff
-//            writeLine("Received: " + temp);
+            String form_hash="1WEUHwRj8KTuTHdiwVhLLVL8idxSPbFU8kVVffkri7P4";
+            String data="entry.2134679435=" + "hi";
+         //   String url = "https://docs.google.com/forms/d/" + form_hash + "/formResponse?ifq&" + data;
+            String auto_submit = "&submit=Submit"; //add this to the end to make it autosubmit
+//        String url = "https://docs.google.com/forms/d/" + form_hash + "/formResponse?&" + data + auto_submit;
             String temp_string = String.format("%.2f", temp);
-            writeLine(temp_string + "C");
+            String url = "https://docs.google.com/forms/d/" + form_hash + "/formResponse?&entry.2134679435=" + temp_string + "&submit=Submit";
+//            1WEUHwRj8KTuTHdiwVhLLVL8idxSPbFU8kVVffkri7P4/formResponse?&entry.2134679435=" + temp_feedback + "&submit=Submit";
+            new RequestTask().execute(url);
+            // this stores the current time and temperature for future access
+//            writeLine("Received: " + temp);
+            writeLine(temp_string + "C", temp);
+            call(temp);
 //            temp_view.setText("C");
         }
     };
@@ -158,24 +185,25 @@ public class TempSetter extends Activity {
         messages = (TextView) findViewById(R.id.messages);
         adapter = BluetoothAdapter.getDefaultAdapter();
         Random rand = new Random();
-        tempInput = rand.nextInt(200) + 1;
+//        tempInput = rand.nextInt(200) + 1;
+//        temp_feedback = Integer.toString(tempInput);
         tempView = (ImageView) findViewById(R.id.tempView);
         temp_view = (TextView) findViewById(R.id.temp_view);
 //        tempInput = (Integer) 200;
+
         handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 //thing to do every 2000 milliseconds (aka every 2 seconds)
                 sendClick();
+
+          //      new RequestTask().execute(url);
                 handler.postDelayed(this, 2000);
             }
             // never reaches this point, so this number doesn't matter
         }, 3000);
-        if (100 < tempInput) {
-            tempView.animate().scaleYBy(1.5f).setDuration(5000); }
       //  temp_view = (TextView) findViewById(R.id.temp_view);
-        temp_feedback = Integer.toString(tempInput);
       //  temp_view.setText(temp_feedback);
 //        setContentView(R.layout.activity_temp_setter);
         next = (Button) findViewById(R.id.next);
@@ -186,15 +214,27 @@ public class TempSetter extends Activity {
             }
         });
 
-
     }
-    private void writeLine(final CharSequence text) {
+    private void call(float curTemp) {
+        if (curTemp >= 28 || curTemp <= 29) {
+            shared_pref = getApplicationContext().getSharedPreferences(
+                    "phone_storage", Context.MODE_PRIVATE
+            );
+            String call = shared_pref.getString("phone_number", "1235550199");
+            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + call));//area code and number, no spaces
+            startActivity(intent);
+        }
+    }
+
+    private void writeLine(final CharSequence text, final float currentTemp) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                tempView.animate().scaleY((currentTemp-20f)/20f).setDuration(1500);
                 temp_view.setText(text);
-            }
-        });
+            }        });
+
+
     }
     private List<UUID> parseUUIDs(final byte[] advertisedData) {
         List<UUID> uuids = new ArrayList<UUID>();
@@ -265,6 +305,41 @@ public class TempSetter extends Activity {
             rx = null;
         }
     }
+    class RequestTask extends AsyncTask<String, String, String> {
+
+        @Override
+        protected String doInBackground(String... uri) {
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpResponse response;
+            String responseString = null;
+            try {
+                response = httpclient.execute(new HttpGet(uri[0]));
+                StatusLine statusLine = response.getStatusLine();
+                if(statusLine.getStatusCode() == HttpStatus.SC_OK){
+                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+                    response.getEntity().writeTo(out);
+                    responseString = out.toString();
+                    out.close();
+                } else{
+                    //Closes the connection.
+                    response.getEntity().getContent().close();
+                    throw new IOException(statusLine.getReasonPhrase());
+                }
+            } catch (ClientProtocolException e) {
+                //TODO Handle problems..
+            } catch (IOException e) {
+                //TODO Handle problems..
+            }
+            return responseString;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            //Do anything with response..
+        }
+    }
+
     public void sendClick() {
         String message = "Wassup!";
         //       String message = input.getText().toString();
